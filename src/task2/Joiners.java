@@ -1,22 +1,38 @@
 package task2;
 
-import task.JoinerImp;
+import task.Joiner;
 
 import java.util.ArrayList;
+import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
 
-public class Joiners<T> {
-
-
-    public T fold(ArrayList<String> list, JoinerImp<String> joiner) {
-
-       T ras = list.get(0);
-        for (int i = 1; i < list.size(); i++) {
-
-            ras = joiner.join(ras,list.get(i));
-
-        }
+public class Joiners {
 
 
-        return ras;
+    public static <T> T fold(ArrayList<T> list, BinaryOperator<T> operator, Supplier<T> supplier) {
+
+       T restul = supplier.get();
+
+       if(restul instanceof String) {
+           StringBuilder stringBuilder = new StringBuilder();
+
+           for(T element : list){
+               stringBuilder.append(operator.apply(restul,element));
+           }
+           return (T) stringBuilder.toString();
+       } else {
+           for(T element : list){
+               restul =  operator.apply(restul,element);
+           }
+       }
+
+
+
+
+
+
+        return restul;
     }
+
+
 }
